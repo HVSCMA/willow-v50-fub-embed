@@ -1,0 +1,16 @@
+{
+  "name": "willow-v50-fub-embed",
+  "version": "1.0.0",
+  "description": "WILLOW V50 FUB Embedded App with Behavioral Scoring & Smart CMA Generation",
+  "scripts": {
+    "dev": "netlify dev",
+    "build": "echo 'No build step required'",
+    "deploy": "netlify deploy --prod"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.7"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.0.0"
+  }
+}

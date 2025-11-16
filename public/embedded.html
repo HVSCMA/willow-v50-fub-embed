@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WILLOW V50 Intelligence</title>
+    <link rel="stylesheet" href="embedded.css">
+</head>
+<body>
+    <div id="willow-app">
+        <div id="loading-state" class="loading">
+            <div class="spinner"></div>
+            <p>Loading WILLOW Intelligence...</p>
+        </div>
+
+        <div id="error-state" class="error hidden">
+            <p class="error-message"></p>
+            <button onclick="location.reload()">Retry</button>
+        </div>
+
+        <div id="main-content" class="hidden">
+            <!-- Behavioral Score Display -->
+            <div class="score-card">
+                <div class="score-header">
+                    <h2>Behavioral Score</h2>
+                    <span id="priority-badge" class="badge"></span>
+                </div>
+                <div class="score-display">
+                    <div class="score-value" id="behavior-score">--</div>
+                    <div class="score-label">out of 100</div>
+                </div>
+                <div class="score-breakdown" id="score-breakdown"></div>
+            </div>
+
+            <!-- Active Triggers -->
+            <div class="triggers-section" id="triggers-section">
+                <h3>Active Triggers</h3>
+                <div id="triggers-list" class="triggers-list"></div>
+            </div>
+
+            <!-- Property Intelligence -->
+            <div class="property-section">
+                <h3>Property Intelligence</h3>
+                <div id="property-info" class="property-info"></div>
+            </div>
+
+            <!-- CMA Parameters -->
+            <div class="cma-section">
+                <h3>CMA Parameters</h3>
+                
+                <div class="param-group">
+                    <label for="radius-slider">Radius: <span id="radius-value">1</span> mi</label>
+                    <input type="range" id="radius-slider" min="0.5" max="5" step="0.5" value="1">
+                </div>
+
+                <div class="param-group">
+                    <label for="days-slider">Days Back: <span id="days-value">365</span></label>
+                    <input type="range" id="days-slider" min="180" max="730" step="30" value="365">
+                </div>
+
+                <div class="param-group">
+                    <label for="comps-slider">Comparables: <span id="comps-value">20</span></label>
+                    <input type="range" id="comps-slider" min="5" max="30" step="1" value="20">
+                </div>
+
+                <div class="param-group">
+                    <label for="variance-slider">Price Variance: <span id="variance-value">10</span>%</label>
+                    <input type="range" id="variance-slider" min="5" max="25" step="5" value="10">
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="actions">
+                <button id="generate-cma-btn" class="btn btn-primary">
+                    <span class="btn-icon">📊</span>
+                    Generate CMA
+                </button>
+                <button id="open-full-btn" class="btn btn-secondary">
+                    <span class="btn-icon">🚀</span>
+                    Open Full Window
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="embedded-app.js?v=20251116-2200"></script>
+</body>
+</html>
