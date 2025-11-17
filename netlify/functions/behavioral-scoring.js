@@ -133,4 +133,4 @@ exports.handler = async (event) => {
       })
     };
   }
-};
+};// Force rebuild Mon Nov 17 15:24:46 UTC 2025
