@@ -476,3 +476,269 @@ body {
 .secondary-card .score-display {
     transform: scale(0.9);
 }
+/* --- V1 Feature Styles --- */
+
+/* Momentum Chip */
+#app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.logo {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.momentum-chip {
+    background: linear-gradient(135deg, #fef3c7 0%, #fcd34d 100%);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 800;
+    color: #92400e;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 4px rgba(245, 158, 11, 0.2);
+    font-size: 0.9rem;
+}
+
+.momentum-streak {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Audio Player */
+.audio-box {
+    border: 1px solid #e5e7eb;
+    background: #fdfeff;
+    padding: 12px;
+    border-radius: 8px;
+}
+
+.audio-player {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 10px;
+    background: #f3f4f6;
+    padding: 10px;
+    border-radius: 30px;
+}
+
+.play-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: #2563eb;
+    color: white;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 4px;
+    /* Optical center */
+}
+
+.play-btn:hover {
+    background: #1d4ed8;
+}
+
+.audio-visualizer {
+    display: flex;
+    gap: 3px;
+    height: 20px;
+    align-items: center;
+}
+
+.bar {
+    width: 3px;
+    background: #9ca3af;
+    height: 10px;
+}
+
+.playing .bar {
+    animation: eq 1s infinite ease-in-out;
+    background: #2563eb;
+}
+
+@keyframes eq {
+    0% {
+        height: 10px;
+    }
+
+    50% {
+        height: 20px;
+    }
+
+    100% {
+        height: 10px;
+    }
+}
+
+.bar:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.bar:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+.bar:nth-child(4) {
+    animation-delay: 0.1s;
+}
+
+.transcript {
+    margin-top: 10px;
+    font-size: 0.85rem;
+    color: #4b5563;
+    background: #fff;
+    padding: 10px;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    max-height: 100px;
+    overflow-y: auto;
+}
+
+/* Chat Interface */
+.chat-interface {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    z-index: 100;
+}
+
+.chat-header {
+    padding: 12px 16px;
+    background: #1f2937;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.toggle-icon {
+    margin-left: auto;
+    font-size: 0.8rem;
+}
+
+.chat-body {
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+    background: #f9fafb;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.message {
+    padding: 8px 12px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    max-width: 85%;
+    line-height: 1.4;
+}
+
+.message.ai {
+    background: #e0e7ff;
+    color: #1e3a8a;
+    align-self: flex-start;
+    border-bottom-left-radius: 2px;
+}
+
+.message.user {
+    background: #10b981;
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 2px;
+}
+
+.chat-input-area {
+    padding: 12px;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    gap: 8px;
+}
+
+.chat-input-area input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 20px;
+    outline: none;
+}
+
+.chat-input-area button {
+    background: #1f2937;
+    color: white;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* CMA Gate */
+.gate-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    background: #fef2f2;
+    padding: 10px;
+    border: 1px solid #fecaca;
+    border-radius: 6px;
+}
+
+.gate-checkbox label {
+    font-size: 0.85rem;
+    color: #991b1b;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.gate-checkbox input {
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+    accent-color: #dc2626;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #9ca3af;
+}

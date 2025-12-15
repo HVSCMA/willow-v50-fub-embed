@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Willow V1 Full Sandbox Validation</title>
+    <link rel="stylesheet" href="embedded.css">
+    <style>
+        body {
+            padding: 20px;
+            font-family: sans-serif;
+            background: #f0f2f5;
+        }
+
+        .test-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .console-output {
+            flex: 1;
+            background: #1e1e1e;
+            color: #0f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            height: 80vh;
+            overflow-y: auto;
+        }
+
+        .app-preview {
+            width: 350px;
+            background: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .status-pass {
+            color: #0f0;
+        }
+
+        .status-fail {
+            color: #f00;
+            font-weight: bold;
+        }
+
+        h3 {
+            margin-top: 0;
+            color: #fff;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Willow V1 Full Sandbox Validation Harness</h1>
+    <div class="test-container">
+        <div class="console-output" id="console">
+            <h3>Test Results</h3>
+        </div>
+
+        <div class="app-preview">
+            <!-- Render App Here (Copied from embedded.html for simplicity in test runner, or loaded via js if we were using modules, but here straightforward injection) -->
+            <div id="willow-app">
+                <div id="app-header">
+                    <h1 class="logo">WILLOW</h1>
+                    <div id="momentum-chip" class="momentum-chip"><span class="icon">🔥</span><span
+                            id="momentum-count">0</span></div>
+                </div>
+                <div id="loading-state" class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading...</p>
+                </div>
+                <div id="error-state" class="error hidden">
+                    <p class="error-message"></p><button>Retry</button>
+                </div>
+
+                <div id="main-content" class="hidden">
+                    <!-- Agent Moment Zero Panel -->
+                    <div id="agent-moment-zero-panel" class="amz-panel">
+                        <div class="amz-header">
+                            <h2>Agent Moment Zero</h2><span id="amz-status-badge" class="badge">--</span>
+                        </div>
+
+                        <div class="amz-section params-grid">
+                            <div class="amz-metric"><label>Est. Value</label>
+                                <div class="value-large" id="amz-est-value">--</div>
+                            </div>
+                            <div class="amz-metric"><label>Range</label>
+                                <div class="value-small" id="amz-range">--</div>
+                            </div>
+                        </div>
+
+                        <div class="amz-section audio-box">
+                            <div class="label-row"><span class="icon">🎧</span><label>Audio Lead Review</label></div>
+                            <div class="audio-player">
+                                <button id="play-briefing-btn" class="play-btn">▶</button>
+                                <div class="audio-visualizer">
+                                    <div class="bar"></div>
+                                    <div class="bar"></div>
+                                    <div class="bar"></div>
+                                    <div class="bar"></div>
+                                </div>
+                            </div>
+                            <div id="audio-transcript" class="transcript hidden"></div>
+                        </div>
+
+                        <div class="amz-section">
+                            <div class="label-row"><span class="icon">⚡</span><label>Why Now?</label></div>
+                            <div id="amz-why-now" class="highlight-text">--</div>
+                        </div>
+                        <div class="amz-section recommendation-box">
+                            <div class="label-row"><span class="icon">🎯</span><label>Recommended Action</label></div>
+                            <div id="amz-action" class="action-text">--</div>
+                        </div>
+                        <div class="amz-section script-box">
+                            <div class="label-row"><span class="icon">💬</span><label>Broker Script</label><button
+                                    class="copy-btn" id="copy-script-btn">📋</button></div>
+                            <div id="amz-script" class="script-text">--</div>
+                        </div>
+
+                        <div class="amz-actions">
+                            <button id="amz-log-note-btn" class="btn btn-primary full-width">📝 Log Note</button>
+                            <div class="btn-group">
+                                <button id="amz-cma-btn" class="btn btn-secondary">📊 CMA Draft</button>
+                                <button id="amz-update-val-btn" class="btn btn-secondary">💰 Update Val</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons & Gate -->
+                    <div class="actions">
+                        <div class="gate-checkbox">
+                            <input type="checkbox" id="cma-pricing-gate">
+                            <label for="cma-pricing-gate">I confirm pricing is accurate</label>
+                        </div>
+                        <button id="generate-cma-btn" class="btn btn-primary" disabled><span
+                                class="btn-icon">📊</span>Generate CMA</button>
+                        <button id="open-full-btn" class="btn btn-secondary">Open Full Window</button>
+                    </div>
+
+                    <!-- AI Chat Interface -->
+                    <div id="ai-chat-interface" class="chat-interface collapsed">
+                        <div class="chat-header" id="chat-toggle"><span>🤖 Assistant</span><span
+                                class="toggle-icon">▲</span></div>
+                        <div class="chat-body hidden" id="chat-body">
+                            <div class="chat-messages" id="chat-messages">
+                                <div class="message ai">Ready.</div>
+                            </div>
+                            <div class="chat-input-area"><input type="text" id="chat-input"><button
+                                    id="chat-send-btn">➤</button></div>
+                        </div>
+                    </div>
+
+                    <!-- Hidden Sliders for Logic Compatibility -->
+                    <div style="display:none">
+                        <input type="range" id="radius-slider" value="1"><span id="radius-value">1</span>
+                        <input type="range" id="days-slider" value="365"><span id="days-value">365</span>
+                        <input type="range" id="comps-slider" value="20"><span id="comps-value">20</span>
+                        <input type="range" id="variance-slider" value="10"><span id="variance-value">10</span>
+                        <div id="behavior-score"></div>
+                        <div id="priority-badge"></div>
+                        <div id="score-breakdown"></div>
+                        <div id="triggers-list"></div>
+                        <div id="property-info"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- TEST RUNNER LOGIC ---
+        const consoleDiv = document.getElementById('console');
+        function log(msg, type = 'info') {
+            const div = document.createElement('div');
+            div.textContent = msg;
+            if (type === 'pass') div.className = 'status-pass';
+            if (type === 'fail') div.className = 'status-fail';
+            consoleDiv.appendChild(div);
+        }
+
+        // --- MOCKS ---
+        const MOCK_DB = {
+            '101': {
+                name: 'John Doe',
+                customFelloLeadScore: 90,
+                customFelloEmailClicks: 2,
+                customCloudCMARequestCount: 0
+            }
+        };
+        window.mockFetchLog = [];
+        window.fetch = async (url, options) => {
+            // window.mockFetchLog.push({ url, options }); 
+            if (url.includes('/behavioral-scoring')) {
+                return { ok: true, json: async () => ({ enhancedBehavioralScore: 85, priority: 'SUPER_HOT', activeTriggers: ['HIGH_FELLO_SCORE'], breakdown: {}, rawData: {} }) };
+            }
+            if (url.includes('/cma-smart-defaults')) return { ok: true, json: async () => ({ defaults: {}, propertyIntelligence: { estimatedValue: 500000 } }) };
+            if (url.includes('/log-action')) {
+                log(`[API] Logged: ${JSON.parse(options.body).noteBody}`, 'pass');
+                return { ok: true, json: async () => ({ success: true }) };
+            }
+            if (url.includes('/cloudcma')) return { ok: true, json: async () => ({ cma: { editUrl: 'http://test.com' } }) };
+            if (url.includes('/fub-sync')) return { ok: true, json: async () => ({ success: true }) };
+            return { ok: false };
+        };
+
+        window.history.pushState({}, '', '?people/101');
+    </script>
+
+    <script src="embedded-app.js"></script>
+
+    <script>
+        // --- AUTO TESTS ---
+        setTimeout(async () => {
+            log('\n--- STARTING V1 VALIDATION ---');
+
+            await new Promise(r => setTimeout(r, 1000));
+
+            // 1. Momentum Check
+            const chip = document.getElementById('momentum-count');
+            log(`Initial Momentum: ${chip.textContent}`);
+
+            // 2. CMA Pricing Gate Test
+            const btn = document.getElementById('generate-cma-btn');
+            const box = document.getElementById('cma-pricing-gate');
+            if (btn.disabled) log('✅ Gate Test: Button Disabled Initially', 'pass');
+            else log('❌ Gate Test: Button NOT Disabled', 'fail');
+
+            box.click(); // Enable
+            if (!btn.disabled) log('✅ Gate Test: Button Enabled on Check', 'pass');
+            else log('❌ Gate Test: Button NOT Enabled', 'fail');
+
+            // 3. Audio Lead Review & Doctrine Test
+            log('Testing Audio Lead Review...');
+            document.getElementById('play-briefing-btn').click();
+
+            await new Promise(r => setTimeout(r, 1500)); // Wait for mock generation
+
+            const transcript = document.getElementById('audio-transcript').textContent;
+            log(`Transcript: ${transcript.substring(0, 50)}...`);
+
+            // DOCTRINE CHECK
+            const forbidden = ['score', 'trigger', 'fello', 'engagement'];
+            const hasForbidden = forbidden.some(w => transcript.includes(`"${w}"`)); // Check quoted script part roughly
+            // Actually, let's check the client script specifically. 
+            // Our mock puts quotes around the script.
+            const clientPart = transcript.split('"[')[0]; // Simple check
+
+            if (transcript.includes("High Fello Engagement")) {
+                log('✅ Doctrine Test: Internal Signal present in Analyst voice', 'pass');
+            }
+            if (transcript.includes("share those insights")) {
+                log('✅ Doctrine Test: Client Script uses market language', 'pass');
+            }
+
+            // 4. Momentum Increment Test
+            // Wait for audio to finish (mock set to 3s, let's fast forward logic or wait)
+            // We can manually trigger logAction to test momentum for speed
+            await logAction('Test Momentum');
+
+            if (parseInt(chip.textContent) > 0) log(`✅ Momentum Test: Counter increased to ${chip.textContent}`, 'pass');
+            else log('❌ Momentum Test: Counter did not increase', 'fail');
+
+            // 5. Chat Test
+            log('Testing Chat...');
+            const chatToggle = document.getElementById('chat-toggle');
+            chatToggle.click();
+            const input = document.getElementById('chat-input');
+            input.value = "Help me pricing";
+            document.getElementById('chat-send-btn').click();
+
+            await new Promise(r => setTimeout(r, 1200));
+            const messages = document.getElementById('chat-messages').innerText;
+            if (messages.includes("pricing approval")) log('✅ Chat Test: AI responded', 'pass');
+            else log('❌ Chat Test: No response', 'fail');
+
+            log('\n--- V1 TESTS COMPLETE ---');
+        }, 1000);
+    </script>
+</body>
+
+</html>

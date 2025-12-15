@@ -40,6 +40,22 @@
     const amzAction = document.getElementById('amz-action');
     const amzScript = document.getElementById('amz-script');
 
+    // V1 Features UI
+    const momentumCount = document.getElementById('momentum-count');
+    const cmaGate = document.getElementById('cma-pricing-gate');
+
+    // Audio UI
+    const playBriefingBtn = document.getElementById('play-briefing-btn');
+    const audioTranscript = document.getElementById('audio-transcript');
+    const audioVisualizer = document.querySelector('.audio-visualizer');
+
+    // Chat UI
+    const chatToggle = document.getElementById('chat-toggle');
+    const chatBody = document.getElementById('chat-body');
+    const chatInput = document.getElementById('chat-input');
+    const chatSendBtn = document.getElementById('chat-send-btn');
+    const chatMessages = document.getElementById('chat-messages');
+
     // AMZ Buttons
     const amzLogNoteBtn = document.getElementById('amz-log-note-btn');
     const amzCmaBtn = document.getElementById('amz-cma-btn');
@@ -50,27 +66,27 @@
     const generateCMABtn = document.getElementById('generate-cma-btn');
     const openFullBtn = document.getElementById('open-full-btn');
 
-    // AMZ Logic Constants
+    // DOCTRINE ENFORCEMENT: Client Scripts must NEVEER mention internal signals
     const AMZ_TRIGGERS_MAP = {
         'HIGH_FELLO_SCORE': {
-            whyNow: 'High Fello Engagement Score',
+            whyNow: 'High Fello Engagement Score', // Internal Only
             action: 'Call Now',
-            script: '“I noticed your property peaked on our engagement radar today. We’re seeing a shift in buyer activity for homes like yours—wanted to share those insights.”'
+            script: '“I noticed your property is in a high-demand zone this week. We’re seeing a shift in buyer activity—wanted to share those insights.”' // Safe
         },
         'SUSTAINED_EMAIL_ENGAGEMENT': {
             whyNow: 'Sustained Email Interest',
             action: 'Personal Email',
-            script: '“You’ve been diligently reading our market updates. I’m curating a specific report on [Neighborhood Name] trends—would that be valuable to you?”'
+            script: '“You’ve been receiving our market updates. I’m curating a specific report on [Neighborhood Name] trends—would that be valuable to you?”'
         },
         'MULTI_CMA_REQUEST': {
             whyNow: 'Multiple Valuation Requests',
             action: 'Call Now',
-            script: '“I see you’re keeping a close eye on your home’s value. The automated models are struggling with the recent [Specific Logic]—I’d like to manually adjust it for you.”'
+            script: '“I see you’re keeping a close eye on your home’s value. The automated models vary wildly—I’d like to manually adjust it for you.”'
         },
         'PROPERTY_COLLECTION_BEHAVIOR': {
             whyNow: 'Saving Multiple Similar Listings',
             action: 'Text Message',
-            script: '“Noticing you saving homes in [Area]. Are you comparing these against your own value, or looking for an investment move?”'
+            script: '“Noticing market activity in [Area]. Are you comparing these against your own value, or looking for an investment move?”'
         },
         'FORM_SUBMISSION': {
             whyNow: 'Direct Inquiry / Form Fill',
@@ -80,7 +96,7 @@
         'DEFAULT': {
             whyNow: 'Periodic Review',
             action: 'Check In',
-            script: '“Just reviewing my priority client list and wanted to ensure our valuation of your home is still accurate given the months market changes.”'
+            script: '“Just reviewing my priority client list and wanted to ensure our valuation of your home is still accurate given this months market changes.”'
         }
     };
 
@@ -106,6 +122,10 @@
             // Setup event listeners
             setupEventListeners();
             setupAMZListeners();
+            setupV1Listeners();
+
+            // Initialize V1 State
+            initMomentum();
 
             // Render Agent Moment Zero
             renderAgentMomentZero();
@@ -418,9 +438,122 @@
             navigator.clipboard.writeText(amzScript.textContent);
             const originalText = copyScriptBtn.textContent;
             copyScriptBtn.textContent = '✅';
-            setTimeout(() => copyScriptBtn.textContent = originalText, 2000);
-            // Auto-log copy action? Maybe too noisy.
         });
+    }
+
+    function setupV1Listeners() {
+        // CMA Gate
+        cmaGate.addEventListener('change', (e) => {
+            generateCMABtn.disabled = !e.target.checked;
+        });
+
+        // Audio Player
+        playBriefingBtn.addEventListener('click', handleAudioBriefing);
+
+        // Chat Interface
+        chatToggle.addEventListener('click', () => {
+            const isHidden = chatBody.classList.contains('hidden');
+            chatBody.classList.toggle('hidden');
+            chatToggle.querySelector('.toggle-icon').textContent = isHidden ? '▼' : '▲';
+        });
+
+        chatSendBtn.addEventListener('click', handleChat);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleChat();
+        });
+    }
+
+    function initMomentum() {
+        const today = new Date().toDateString();
+        const stored = localStorage.getItem('willow_momentum');
+        let data = { date: today, count: 0 };
+
+        if (stored) {
+            const parsed = JSON.parse(stored);
+            if (parsed.date === today) {
+                data = parsed;
+            }
+        }
+
+        momentumCount.textContent = data.count;
+    }
+
+    function incrementMomentum() {
+        let count = parseInt(momentumCount.textContent) || 0;
+        count++;
+        momentumCount.textContent = count;
+
+        // Persist
+        const data = { date: new Date().toDateString(), count: count };
+        localStorage.setItem('willow_momentum', JSON.stringify(data));
+
+        // Anim
+        const chip = document.getElementById('momentum-chip');
+        chip.classList.add('momentum-streak');
+        setTimeout(() => chip.classList.remove('momentum-streak'), 2000);
+    }
+
+    // AUDIO LOGIC: Doctrine Enforced
+    async function handleAudioBriefing() {
+        if (playBriefingBtn.classList.contains('playing')) return;
+
+        playBriefingBtn.classList.add('playing');
+        playBriefingBtn.textContent = '⏸';
+        audioVisualizer.classList.add('playing');
+
+        // Simulate Generation Delay
+        await new Promise(r => setTimeout(r, 800));
+
+        // MOCK GENERATION - In real app, this comes from backend with strict prompt
+        const trigger = (behavioralData && behavioralData.activeTriggers[0]) || 'DEFAULT';
+
+        // Internal Context (What the agent needs to know)
+        const internalContext = `Flagged due to ${AMZ_TRIGGERS_MAP[trigger].whyNow}.`;
+
+        // Client Safe Script (What maps to the audio)
+        const safeScript = AMZ_TRIGGERS_MAP[trigger].script;
+
+        // Structure: [Intro] + [Market Reason] + [Question]
+        const transcriptText = `(Briefing for ${currentPersonId})\n\n[Analyst]: ${internalContext} Market conditions favor a check-in.\n\n[Suggested Voice]: "${safeScript}"`;
+
+        audioTranscript.textContent = transcriptText;
+        audioTranscript.classList.remove('hidden');
+
+        // Simulate play time then stop
+        setTimeout(() => {
+            playBriefingBtn.classList.remove('playing');
+            playBriefingBtn.textContent = '▶';
+            audioVisualizer.classList.remove('playing');
+            incrementMomentum(); // Listening counts as prep action
+            logAction('Listened to Audio Lead Review');
+        }, 3000);
+    }
+
+    // CHAT LOGIC: Mock
+    async function handleChat() {
+        const text = chatInput.value.trim();
+        if (!text) return;
+
+        // User Message
+        const userDiv = document.createElement('div');
+        userDiv.className = 'message user';
+        userDiv.textContent = text;
+        chatMessages.appendChild(userDiv);
+        chatInput.value = '';
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        // AI Response Mock
+        setTimeout(() => {
+            const aiDiv = document.createElement('div');
+            aiDiv.className = 'message ai';
+            aiDiv.textContent = "I've logged that note for you. Pricing approval is required before the next CMA.";
+            chatMessages.appendChild(aiDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Auto Log if it looks like a note
+            incrementMomentum();
+            logAction(`Chat Interaction: ${text}`);
+        }, 1000);
     }
 
     async function logAction(noteBody) {
@@ -447,6 +580,10 @@
 
             // Visual success feedback
             amzLogNoteBtn.innerHTML = '✅ Saved';
+
+            // V1: Momentum
+            incrementMomentum();
+
             setTimeout(() => {
                 amzLogNoteBtn.innerHTML = originalText;
                 amzLogNoteBtn.disabled = false;
