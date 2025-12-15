@@ -19,17 +19,75 @@
         </div>
 
         <div id="main-content" class="hidden">
-            <!-- Behavioral Score Display -->
-            <div class="score-card">
+            <!-- Agent Moment Zero Panel (Primary) -->
+            <div id="agent-moment-zero-panel" class="amz-panel">
+                <div class="amz-header">
+                    <h2>Agent Moment Zero</h2>
+                    <span id="amz-status-badge" class="badge">--</span>
+                </div>
+                
+                <div class="amz-section params-grid">
+                     <div class="amz-metric">
+                        <label>Est. Value</label>
+                        <div class="value-large" id="amz-est-value">--</div>
+                    </div>
+                     <div class="amz-metric">
+                        <label>Range</label>
+                        <div class="value-small" id="amz-range">--</div>
+                    </div>
+                </div>
+
+                <div class="amz-section">
+                    <div class="label-row">
+                        <span class="icon">⚡</span>
+                        <label>Why Now?</label>
+                    </div>
+                    <div id="amz-why-now" class="highlight-text">--</div>
+                </div>
+
+                <div class="amz-section recommendation-box">
+                    <div class="label-row">
+                        <span class="icon">🎯</span>
+                        <label>Recommended Action</label>
+                    </div>
+                    <div id="amz-action" class="action-text">--</div>
+                </div>
+
+                <div class="amz-section script-box">
+                    <div class="label-row">
+                        <span class="icon">💬</span>
+                        <label>Broker Script</label>
+                        <button class="copy-btn" id="copy-script-btn" title="Copy to clipboard">📋</button>
+                    </div>
+                    <div id="amz-script" class="script-text">--</div>
+                </div>
+
+                <div class="amz-actions">
+                    <button id="amz-log-note-btn" class="btn btn-primary full-width">
+                        📝 Log Note
+                    </button>
+                    <div class="btn-group">
+                         <button id="amz-cma-btn" class="btn btn-secondary">
+                            📊 CMA Draft
+                        </button>
+                        <button id="amz-update-val-btn" class="btn btn-secondary">
+                            💰 Update Val
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Behavioral Score Display (Secondary) -->
+            <div class="score-card secondary-card">
                 <div class="score-header">
                     <h2>Behavioral Score</h2>
                     <span id="priority-badge" class="badge"></span>
                 </div>
                 <div class="score-display">
-                    <div class="score-value" id="behavior-score">--</div>
+                    <div class="score-value" id="behavior-score">-</div>
                     <div class="score-label">out of 100</div>
                 </div>
-                <div class="score-breakdown" id="score-breakdown"></div>
+                <!-- <div class="score-breakdown" id="score-breakdown"></div> -->
             </div>
 
             <!-- Active Triggers -->

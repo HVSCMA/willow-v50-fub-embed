@@ -43,7 +43,12 @@ exports.handler = async (event) => {
       body: JSON.stringify({
         customCloudCMALastRequest: cmaGeneratedDate || new Date().toISOString(),
         customWillowLastCMAGenerated: new Date().toISOString(),
-        customCloudCMARequestCount: 'INCREMENT' // FUB will increment
+        customCloudCMARequestCount: 'INCREMENT', // FUB will increment
+        customWillowStatus: 'Active',
+        customWillowWhyNowTrigger: 'CMA Generated',
+        customWillowRecommendedAction: 'Review CMA with Client',
+        // Optional: Validation or checks could be added here if these values should be dynamic from the request
+
       })
     });
 
@@ -66,9 +71,9 @@ exports.handler = async (event) => {
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ 
+      body: JSON.stringify({
         error: 'Failed to sync FUB fields',
-        details: error.message 
+        details: error.message
       })
     };
   }

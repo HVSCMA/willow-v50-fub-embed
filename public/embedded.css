@@ -324,4 +324,155 @@ body {
 
 .btn-icon {
     font-size: 18px;
+}/* Agent Moment Zero Styles */
+.amz-panel {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.amz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    border-bottom: 1px solid #f3f4f6;
+    padding-bottom: 12px;
+}
+
+.amz-header h2 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #111827;
+    font-weight: 700;
+}
+
+.amz-section {
+    margin-bottom: 16px;
+}
+
+.params-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.amz-metric label, .label-row label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #6b7280;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+.value-large {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #1f2937;
+}
+
+.value-small {
+    font-size: 0.9rem;
+    color: #4b5563;
+    margin-top: 4px;
+}
+
+.label-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 1px;
+    margin-top: 10px;
+}
+
+.highlight-text {
+    background-color: #fef3c7;
+    color: #92400e;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-left: 4px solid #f59e0b;
+}
+
+.recommendation-box {
+    background-color: #ecfdf5;
+    border: 1px solid #d1fae5;
+    border-radius: 6px;
+    padding: 10px;
+}
+
+.action-text {
+    color: #065f46;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-top: 4px;
+}
+
+.script-box {
+    background-color: #f9fafb;
+    border: 1px dashed #d1d5db;
+    border-radius: 6px;
+    padding: 12px;
+    position: relative;
+}
+
+.script-text {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #374151;
+    font-style: italic;
+}
+
+.copy-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 2px;
+    opacity: 0.6;
+}
+
+.copy-btn:hover {
+    opacity: 1;
+}
+
+.amz-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.full-width {
+    width: 100%;
+    justify-content: center;
+    padding: 12px;
+    font-size: 1rem;
+}
+
+.btn-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.btn-group .btn {
+    font-size: 0.85rem;
+    padding: 8px;
+    justify-content: center;
+}
+
+.secondary-card {
+    opacity: 0.8;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+}
+
+.secondary-card .score-display {
+    transform: scale(0.9);
 }
